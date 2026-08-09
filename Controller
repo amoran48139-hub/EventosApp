@@ -1,0 +1,111 @@
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
+
+#include <iostream>
+#include <limits>
+#include "Model.h"
+#include "View.h"
+
+using namespace std;
+
+class Controller {
+private:
+    Calendar calendar;
+    View view;
+
+     int readOption() {
+        int option;
+        while (true) {
+            cin >> option;
+            if (cin.fail() || option < 1 || option > 6) {
+                cin.clear(); // limpia el error de cin
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // descarta lo que se escribio mal
+                cout << "Opcion invalida, intenta de nuevo: ";
+            }
+            else {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                return option;
+            }
+        }
+    }
+
+    int readDay() {
+        int day;
+        while (true) {
+            cout << "Dia del mes (1-31): ";
+            cin >> day;
+            if (cin.fail() || day < 1 || day > 31) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Dia invalido, intenta de nuevo.\n";
+            }
+            else {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                return day;
+            }
+        }
+    }
+
+    Event readEvent() {
+        Event event;
+        event.day = readDay();
+
+        cout << "Descripcion del evento: ";
+        getline(cin, event.description);
+        while (event.description.empty()) {
+            cout << "La descripcion no puede estar vacia. Intenta de nuevo: ";
+            getline(cin, event.description);
+        }
+
+        return event;
+    }
+
+public:
+    void run() {
+        int option;
+        do {
+            view.showMenu();
+            option = readOption();
+
+            switch (option) {
+            case 1: {
+                Event newEvent = readEvent();
+                calendar.addEvent(newEvent);
+                view.showMessage("Evento agregado correctamente.");
+                break;
+            }
+            case 2: {
+                Event next;
+                if (calendar.getNextReminder(next)) {
+                    view.showEvent("Recordatorio", next);
+                }
+                else {
+                    view.showMessage("No hay recordatorios pendientes.");
+                }
+                break;
+            }
+            case 3:
+                view.showAllEvents(calendar.getEventsCopy());
+                break;
+            case 4: {
+                int day = readDay();
+                if (calendar.removeEvent(day)) {
+                    view.showMessage("Evento eliminado.");
+                }
+                else {
+                    view.showMessage("No se encontro ningun evento en ese dia.");
+                }
+                break;
+            }
+            case 5:
+                view.showCount(calendar.pendingRemindersCount());
+                break;
+            case 6:
+                view.showMessage("Cerrando la aplicacion...");
+                break;
+            }
+        } while (option != 6);
+    }
+};
+
+#endif#pragma once
