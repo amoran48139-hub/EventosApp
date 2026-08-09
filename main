@@ -1,7 +1,5 @@
 #include "Controller.h"
 
-// El main es muy corto a proposito:
-// solo crea el Controlador y le dice que arranque.
 int main() {
     Controller controller;
     controller.run();
