@@ -1,0 +1,53 @@
+#ifndef MODEL_H
+#define MODEL_H
+
+#include <list>
+#include <queue>
+#include <string>
+
+using namespace std;
+
+struct Event {
+    int day;
+    string description;
+};
+
+class Calendar {
+private:
+    list<Event> events;      
+    queue<Event> reminders;  
+public:
+    void addEvent(const Event& event) {
+        events.push_back(event);
+        reminders.push(event);
+    }
+
+    bool getNextReminder(Event& next) {
+        if (reminders.empty()) {
+            return false;
+        }
+        next = reminders.front();
+        reminders.pop();
+        return true;
+    }
+
+    bool removeEvent(int day) {
+        for (auto it = events.begin(); it != events.end(); ++it) {
+            if (it->day == day) {
+                events.erase(it);
+                return true;
+            }
+        }
+        return false; // no se encontro ningun evento en ese dia
+    }
+
+    list<Event> getEventsCopy() {
+        return events;
+    }
+
+    int pendingRemindersCount() {
+        return static_cast<int>(reminders.size());
+    }
+};
+
+#endif#pragma once
