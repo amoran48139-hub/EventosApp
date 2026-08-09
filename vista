@@ -1,0 +1,46 @@
+#ifndef VIEW_H
+#define VIEW_H
+
+#include <iostream>
+#include "Model.h"
+
+using namespace std;
+
+class View {
+public:
+    void showMenu() {
+        cout << "\n===== RECORDATORIO DE EVENTOS DEL MES =====\n";
+        cout << "1. Agregar evento\n";
+        cout << "2. Ver el siguiente recordatorio pendiente\n";
+        cout << "3. Ver todos los eventos del mes\n";
+        cout << "4. Eliminar un evento\n";
+        cout << "5. Ver cuantos recordatorios faltan por mostrar\n";
+        cout << "6. Salir\n";
+        cout << "Elige una opcion: ";
+    }
+
+    void showMessage(const string& msg) {
+        cout << msg << endl;
+    }
+
+    void showEvent(const string& label, const Event& event) {
+        cout << label << ": Dia " << event.day << " - " << event.description << endl;
+    }
+
+    void showAllEvents(list<Event> events) {
+        if (events.empty()) {
+            cout << "No hay eventos registrados este mes.\n";
+            return;
+        }
+        cout << "--- Eventos del mes ---\n";
+        for (const Event& e : events) {
+            cout << "Dia " << e.day << ": " << e.description << endl;
+        }
+    }
+
+    void showCount(int count) {
+        cout << "Recordatorios pendientes por mostrar: " << count << endl;
+    }
+};
+
+#endif#pragma once
